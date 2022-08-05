@@ -1,6 +1,7 @@
 let input = require('fs').readFileSync('example.txt').toString().split('\n'); /// /dev/stdin
 let result = [];
 let stack = [];
+console.log
 for (let i = 1; i < input.length - 1; i++) {
     input[i] = input[i].replace('\r', '');
     let operation = input[i].split(' ')[0];
@@ -27,20 +28,7 @@ for (let i = 1; i < input.length - 1; i++) {
             else result.push(stack[stack.length - 1]);
             break;
     }
-    const readline = require("readline");
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    let input;
-    rl.on("line", function (line) {
-        input = line;
-        // input = parseInt(line); // 입력 값이 정수라면 parseInt로 형변환
-        rl.close();
-    }).on("close", function () {
-        solution(input);
-        process.exit();
-    })
+
 
 
 }

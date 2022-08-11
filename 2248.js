@@ -10,30 +10,40 @@ let input = fs.readFileSync(filePath).toString().trim().split(splitType); /// /d
 // 5C3 5C2 5C1 5C0 순으로 10 10 5 1 총 26이다. 
 let [size,key,target] = input[0].split(' ');
 
-let dp = Array.from(new Array(parseInt(size) +1 ), ()=> new Array(parseInt(size) +1));
+let dp = Array.from(new Array(parseInt(size) +1 ), ()=> new Array(parseInt(size) +1).fill(0));
 let answer = '';
-const dpAl = (x,y) => {
-    if (x === y) return Math.pow(2,x);
-    if (y === 0) return 1;
-    dp[x][y] =  dpAl(x-1,y-1) + dpAl(x-1,y);
-    return dp[x][y]
+dp[0][0] = 1;
+for (let i =1; i<=parseInt(size); i++){
+    dp[i][0] = 1;
+    dp[i][i] = 1; 
 }
-dpAl(parseInt(size),parseInt(key));
-let max = dp[size-1][key];
-const findVal = ( t, s , k ) => {
-    console.log(t,s,k)
-    if ( t > max) {
-        answer+='1';
-        max +=dp[s-1][k];
-        findVal(t,s-1,k-1)
-    } else if(t<max) {
-        answer+='0'
-        max = dp[s-1][k];
-        findVal(t,s-1,k);
-    } else {
-        answer+='011'
+for (let i =2; i<=parseInt(size); i++) {
+    for (let j=1; j<=i; j++) {
+        dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
     }
-    if (k==1) return
 }
-findVal(target,size,key);
+const findVal = ( s, k , t ) => {
+    if (s === 0) return;
+    if (k === 0) {
+        for(let i =0; i<s; i++) {
+            answer +='0';
+        }
+        return
+    }
+    let sum = 0;
+    for (let i=0; i<=k; i++) {
+        sum+=dp[s-1][i];
+    }
+    if(sum > t){
+        answer +='0';
+        findVal(s-1,k,t);
+    }else {
+        answer += '1';
+        findVal(s-1,k-1,t-sum);
+    }
+    return
+
+
+}
+findVal(parseInt(size),parseInt(key),parseInt(target-1));
 console.log(answer)

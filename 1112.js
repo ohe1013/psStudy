@@ -15,9 +15,8 @@ const makeMinusNotation = ( v , n) => {
             v= (v- (v%n))/n;
         } else {
             _.push(v%n - n);
-        v = (v - (v%n-n)) / n;
+            v = (v - (v%n-n)) / n;
         }
-        
     }
     else{
         _.push(v%n);

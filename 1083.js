@@ -6,9 +6,6 @@ let input = fs.readFileSync(filePath).toString().trim().split(splitType);
 let [N,S] = [parseInt(input.shift()),parseInt(input.pop())];
 
 const arr = input[0].split(' ').map(Number);
-const maxArr = [...arr].sort((a,b) => b- a);
-let index = 0;
-let pos = 0;
 // 교환을 S번 할 수 있다.
 // 근데 막 1000번 이러면 어떻게 되나? 교환이 끝났으면 그냥 출력하면되나?
 // 이제 좀 알겠다. 
@@ -20,19 +17,23 @@ let pos = 0;
 // 옮겼을때의 횟수를ㄹ K번이라고하면, S = S-k로한다.
 // 이거를 반복한다.
 
-while ( pos < N) {
-    let max = Math.max(...arr.slice(index));
-    let maxDis = arr.indexOf(max);
-    if (maxDis - pos <= S) {
-        for(let i=maxDis; i>pos; i--) {
-            [arr[i], arr[i-1]] = [arr[i-1], arr[i]];
+let maxNum, maxIdx;
+
+for( let i = 0; i <N; i++) {
+    maxNum = arr[i];
+    maxIdx = i;
+    for (let j= i+1; j<N; j++) {
+        if( S-(j-i) >=0 ) {
+            if (maxNum <arr[j]) {
+                maxNum = arr[j];
+                maxIdx = j;
+            }
         }
-        // arr.splice(maxDis,1);
-        // arr.splice(pos,0,max)
-        S = S -(maxDis-pos);
-        pos++;
     }
-    index++;
-    if ([...arr] === [...maxArr]) break;
-}
+    for (let j = maxIdx; j>i; j--) {
+        [arr[j], arr[j-1]] =[arr[j-1], arr[j]];
+    }
+    S -= (maxIdx - i);
+    if(S<=0) break;
+}  
 console.log(arr.join(' ')); 

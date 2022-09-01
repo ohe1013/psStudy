@@ -33,4 +33,3 @@ const dfs = (x,y) => {
     return count;
 }
 console.log(dfs(0,0))
-console.log(dp)

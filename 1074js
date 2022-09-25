@@ -30,23 +30,23 @@ const [N,r,c] = input.shift().split(' ').map(Number);
 
 let rsum = 0;
 let csum = 0;
-
+let answer = 0;
 for(let i = N - 1; i >= 0 ; i--) {
     let temp = Math.pow(2,i);
     let count = 0;
     rsum += temp;
     csum += temp;
-    if ( r > rsum) {
+    if ( r >= rsum) {
         count+=2;
     } else {
         rsum -=temp;
     }
-    if ( c > csum) {
+    if ( c >= csum) {
         count++;
     } else {
         csum -=temp;
-    }
-
-    
+    } 
+    answer += count * Math.pow(temp,2);
     
 }
+console.log(answer)

@@ -33,19 +33,42 @@ n	results	return
 3번 아래에 2
 4번 아래에 3,2
 5번 아래에 x
-1 [][2,5]
-2 [1,3,4][5]
-3 [4][2,5]
+1 [][2]
+2 [][5]
+3 [][2]
 4 [][2,3]
-5 [1,2,3,4][]
+5 [][]
 */
 
 function solution(n, results) {
     var answer = 0;
     const arr = new Array(n + 1).fill(0).map(() => [[], []]);
     results.forEach((result) => arr[result[0]][1].push(result[1]));
-    function dfs(arr) {}
 
+    function dfs(index, indexArr) {
+        if (arr[index][1].length === 0) {
+            return;
+        } else {
+            indexArr.push(index);
+        }
+        for (let i = 0; i < arr[index][1].length; i++) {
+            let item = arr[index][1][i];
+            console.log(arr, indexArr, item);
+            indexArr.forEach((i) => {
+                arr[i][1] = Array.from(new Set([...arr[i][1], item]));
+            });
+            arr[item][0] = Array.from(new Set([...arr[item][0], ...indexArr]));
+            dfs(item, indexArr);
+            if (indexArr.includes(index)) return;
+        }
+    }
+    for (let i = 1; i <= n; i++) {
+        dfs(i, [], []);
+    }
+
+    arr.forEach((item) => {
+        if (item[0].length + item[1].length === n - 1) answer++;
+    });
     return answer;
 }
 

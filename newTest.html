@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Page Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+            src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
+            integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body>
+        <div class="content">
+            <ul class="menu-title">
+                <li><a href="#" class="menu-btn-on">1</a></li>
+                <i>|</i>
+                <li><a href="#" class="menu-btn">2</a></li>
+                <i>|</i>
+                <li><a href="#" class="menu-btn">3</a></li>
+                <i>|</i>
+                <li><a href="#" class="menu-btn">4</a></li>
+            </ul>
+            <a href="#" title="preview" class="prev-btn"></a>
+            <a href="#" title="next" class="next"></a>
+        </div>
+        <div class="menu-viewport">
+            <div class="sb-menu active">
+                <ul class="menu1"></ul>
+            </div>
+            <div class="sb-menu">
+                <ul class="menu2"></ul>
+            </div>
+            <div class="sb-menu">
+                <ul class="menu3"></ul>
+            </div>
+            <div class="sb-menu">
+                <ul class="menu4"></ul>
+            </div>
+        </div>
+        <script>
+            const menuBtn = $(".menu-btn");
+            menuBtn.on({
+                click: function (e) {
+                    e.preventDefault();
+                    menuBtn.removeClass("on");
+                    $(this).addClass("on");
+                    let i = $(".content>ul>li>a").index(this);
+                    console.log(i);
+                },
+            });
+            console.log($(".content>ul>li").index());
+            console.log(document.querySelectorAll(".menu-title>li")[3].value);
+        </script>
+    </body>
+</html>

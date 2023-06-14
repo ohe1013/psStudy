@@ -40,21 +40,16 @@ const checkRedFirst = (red, blue, dir) => {
     }
 };
 
-const moveBall = (ball, dir, type) => {
+const moveBall = (ball, ohter, dir, type) => {
     while (true) {
         const nx = DIR[dir][0] + ball[0];
         const ny = DIR[dir][1] + ball[1];
-        const status = board[nx][ny];
-        if (status === ".") {
-            board[ball[0]][ball[1]] = ".";
+        if (nx === ohter[0] && ny === ohter[1]) {
+            break;
+        } else if (board[nx][ny] === ".") {
             ball[0] = nx;
             ball[1] = ny;
-            board[nx][ny] = type;
-            continue;
-        } else if (status === "#") {
-            break;
-        } else if (status === "O") {
-            board[ball[0]][ball[1]] = ".";
+        } else if (board[nx][ny] === "O") {
             ball[0] = -1;
             ball[1] = -1;
             break;
@@ -68,27 +63,25 @@ function check(ball) {
     if (ball[0] === -1 && ball[1] === -1) return true;
     else return false;
 }
-const queue = [[red[0], red[1], blue[0], blue[1], 1]];
+const queue = [[...red, ...blue, 1]];
 let answer = Infinity;
 while (queue.length > 0) {
     const [red_x, red_y, blue_x, blue_y, cnt] = queue.pop();
-    console.log(queue);
     for (let dir of Object.keys(DIR)) {
         const reds = [red_x, red_y];
         const blues = [blue_x, blue_y];
         if (checkRedFirst(reds, blues, dir)) {
-            moveBall(reds, dir, "R");
-            moveBall(blues, dir, "B");
+            moveBall(reds, blues, dir, "R");
+            moveBall(blues, reds, dir, "B");
         } else {
-            moveBall(blues, dir, "B");
-            moveBall(reds, dir, "R");
+            moveBall(blues, reds, dir, "B");
+            moveBall(reds, blues, dir, "R");
         }
 
         if (check(blues)) {
             continue;
         }
         if (check(reds)) {
-            console.log(blues, reds, cnt);
             answer = answer < cnt ? answer : cnt;
             break;
         }

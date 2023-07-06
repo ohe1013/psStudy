@@ -120,7 +120,7 @@ dirs.forEach((item) => {
         map[x][y] = bottom;
     } else {
         setDice({ bottom: map[x][y] });
+        map[x][y] = 0;
     }
-    console.log(dice);
     console.log(top);
 });

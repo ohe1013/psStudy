@@ -6,7 +6,6 @@ let input = fs.readFileSync(filePath).toString().trim().split(splitType);
 const [N, L, R] = input.shift().split(" ").map(Number);
 
 const pMap = input.map((item) => item.split(" ").map(Number));
-const visitedMap = new Array(N).fill(0).map((_) => new Array(N).fill(false));
 
 //bfs로 접근하는게 제일 무난한가? 최대로
 /**
@@ -20,71 +19,63 @@ const visitedMap = new Array(N).fill(0).map((_) => new Array(N).fill(false));
  */
 
 const dirs = [
-  [0, 1],
-  [1, 0],
-  [0, -1],
-  [-1, 0],
+    [0, 1],
+    [1, 0],
+    [0, -1],
+    [-1, 0],
 ];
 
 const bfs = (x, y, pMap, visited, _bulkItems, _bulkValues) => {
-  _bulkItems.push([x, y]);
-  _bulkValues.push(pMap[x][y]);
-  for (const dir of dirs) {
-    const dx = dir[0] + x;
-    const dy = dir[1] + y;
-    console.log("bbb", dx, dy);
-    if (dx >= 0 && dy >= 0 && dx < N && dy < N && visited[x][y] === false) {
-      console.log("aaa", dx, dy);
-      visited[x][y] = true;
-      const diff = Math.abs(pMap[dx][dy] - pMap[x][y]);
-      if (diff >= L && diff <= R) {
-        bfs(dx, dy, pMap, visited, _bulkItems, _bulkValues);
-      }
+    _bulkItems.push([x, y]);
+    _bulkValues.push(pMap[x][y]);
+    visited[x][y] = true;
+    for (const dir of dirs) {
+        const dx = dir[0] + x;
+        const dy = dir[1] + y;
+        // console.log("bbb", dx, dy, visited[x][y]);
+        if (dx >= 0 && dy >= 0 && dx < N && dy < N && visited[dx][dy] === false) {
+            // console.log("aaa", dx, dy);
+            const diff = Math.abs(pMap[dx][dy] - pMap[x][y]);
+            if (diff >= L && diff <= R) {
+                bfs(dx, dy, pMap, visited, _bulkItems, _bulkValues);
+            }
+        }
     }
-  }
-  return { _bulkItems, _bulkValues };
+    return { _bulkItems, _bulkValues };
 };
 let count = 0;
 
 while (true) {
-  let check = 0;
-  while (true) {
-    const bullkItems = [];
-    const bulkValues = [];
+    let check = 0;
+    const visitedMap = new Array(N).fill(0).map((_) => new Array(N).fill(false));
+    while (true) {
+        const bullkItems = [];
+        const bulkValues = [];
 
-    let x, y;
-    for (let i = 0; i < N; i++) {
-      const h = visitedMap[i].indexOf(false);
-      if (h > -1) {
-        x = i;
-        y = h;
-        break;
-      }
+        let x, y;
+        for (let i = 0; i < N; i++) {
+            const h = visitedMap[i].indexOf(false);
+            if (h > -1) {
+                x = i;
+                y = h;
+                break;
+            }
+        }
+        // console.log(x, y);
+        if (x === undefined || y === undefined) break;
+        bfs(x, y, pMap, visitedMap, bullkItems, bulkValues);
+
+        const sumBulkValue = bulkValues.reduce((prev, cur) => prev + cur, 0);
+        const avgBulkValue = parseInt(sumBulkValue / bullkItems.length);
+        if (bullkItems.length > 1) {
+            check++;
+        }
+        bullkItems.forEach((item) => {
+            pMap[item[0]][item[1]] = avgBulkValue;
+        });
     }
-    console.log(x, y);
-    if (x === undefined || y === undefined) break;
-    const { _bulkItems, _bulkValues } = bfs(
-      x,
-      y,
-      pMap,
-      visitedMap,
-      bullkItems,
-      bulkValues
-    );
 
-    const sumBulkValue = bulkValues.reduce((prev, cur) => prev + cur, 0);
-    const avgBulkValue = parseInt(sumBulkValue / bullkItems.length);
-    if (bullkItems.length > 1) {
-      check++;
-    }
-    bullkItems.forEach((item) => {
-      pMap[item[0]][item[1]] = avgBulkValue;
-    });
-    console.log(bulkValues);
-  }
-  console.log(pMap);
-  count++;
-
-  if (check === 0) break;
+    if (check === 0) break;
+    count++;
 }
 console.log(count);

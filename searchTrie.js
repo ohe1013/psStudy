@@ -21,6 +21,40 @@ function Trie() {
     };
 }
 
+function Queue() {
+    this.queue = [];
+    this.front = 0;
+    this.rear = 0;
+    this.size = 0;
+
+    this.enqueue = function (node) {
+        this.size += 1;
+        this.queue[this.rear++] = node;
+    };
+
+    this.garbageCollect = function () {
+        if (this.size > 100000) {
+            this.queue = this.queue.slice(front, rear);
+        }
+    };
+    this.dequeue = function () {
+        const value = this.queue[this.front];
+        this.front++;
+        this.size--;
+        return value;
+    };
+}
+
+function AutoComplete(trie) {
+    this.root = trie.root;
+    this.wordList = [];
+
+    this.print = function (string) {
+        this.wordList = [];
+        const queue = new Queue();
+    };
+}
+
 const trie = new Trie();
 
 subwayNm.forEach((station) => {
